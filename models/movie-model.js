@@ -46,8 +46,8 @@ exports.addMovie = function(newMovie) {
     return Movie.create(newMovie);
 };
 
-exports.editMovie = function(editMovie) {
-    return Movie.updateOne(editMovie);
+exports.editMovie = function(title, editMovie) {
+    return Movie.updateOne({title:title}, editMovie);
 }
 
 exports.deleteMovie = function(title) {

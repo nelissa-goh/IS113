@@ -104,7 +104,6 @@ exports.editMovie = async (req, res) => {
   const image = req.body.image;
 
   let editMovie = {
-    title: title,
     releaseYear: releaseYear,
     category: category,
     synopsis: synopsis,
@@ -114,7 +113,7 @@ exports.editMovie = async (req, res) => {
   };
 
   try {
-    let success = await Movie.editMovie(editMovie);
+    let success = await Movie.editMovie(title, editMovie);
     console.log(success);
     res.send("Movie has been successfully updated.");
   } catch (error) {
