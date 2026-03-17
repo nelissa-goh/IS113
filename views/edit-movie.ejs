@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Movie</title>
+</head>
+<body>
+    <% if (result.title) { %>
+    <h3>Edit Movie</h3>
+    <form action="/edit-movie" method="post">
+        <strong><%= result.title %></strong><br>
+        Title:
+        <input type="text" name="releaseYear" value="<%= result.releaseYear %>"><br>
+        Category:
+        <input type="text" name="category" value="<%= result.category %>"><br>
+        Synopsis:
+        <input type="text" name="synopsis" value="<%= result.synopsis %>"><br>
+        Runtime:
+        <input type="text" name="runtime" value="<%= result.runTime %>"><br>
+        Director:
+        <input type="text" name="director" value="<%= result.director %>"><br>
+        Image:
+        <input type="text" name="image" value="<%= result.image %>"><br>
+        <input type="hidden" name="title" value="<%= result.title %>"><br><br>
+        <button type="submit">Update Movie</button>
+    </form>
+    <% } %>
+</body>
+</html>

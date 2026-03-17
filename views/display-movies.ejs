@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Movies</title>
+</head>
+<body>
+    <% if (movieList.length === 0) { %>
+        <h3>No movies yet.</h3>
+    <% } else { %>
+        <h3>All Movies</h3>
+        <% movieList.forEach(movie => { %>
+            <p><strong>Title: <%= movie.title %></strong></p>
+            Release year: <%= movie.releaseYear %><br>
+            Category:<%= movie.category %><br>
+            Synopsis:<%= movie.synopsis %><br>
+            Runtime: <%= movie.runtime %><br>
+            Director:<%= movie.director %><br>
+            Image:<%= movie.image %><br>
+            <a href="/edit-movie?title=<%= movie.title %>">Edit</a> | 
+            <a href="/delete-movie?title=<%= movie.title %>">Delete</a>
+        <hr>
+        <% }); %>
+    <% } %>
+</body>
+</html>

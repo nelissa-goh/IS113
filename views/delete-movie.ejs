@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Movie</title>
+</head>
+<body>
+    <% if (result) { %>
+        <h3>Delete Movie</h3><br>
+        Title: <%= result.title %><br>
+        Release year: <%= result.releaseYear %><br>
+        Category:<%= result.category %><br>
+        Synopsis:<%= result.synopsis %><br>
+        Runtime: <%= result.runtime %><br>
+        Director:<%= result.director %><br>
+        Image:<%= result.image %><br><br>
+        <form action="/delete-movie" method="post">
+            <input type="hidden" name="title" value="<%= result.title %>">
+            <button type="submit">Delete</button>
+        </form>
+    <% } else if (result === null) { %>
+        <p>Movie not found</p>
+    <% } %>
+</body>
+</html>

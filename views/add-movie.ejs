@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Movie</title>
+</head>
+<body>
+    <h3>Add Movie</h3>
+    <form action="/add-movie" method="post">
+        <input type="text" name="title" placeholder="Title"><br>
+        <input type="text" name="releaseYear" placeholder="Release Year"><br>
+        <input type="text" name="category" placeholder="Category"><br>
+        <input type="text" name="synopsis" placeholder="Synopsis"><br>
+        <input type="text" name="runtime" placeholder="Runtime"><br>
+        <input type="text" name="director" placeholder="Director"><br>
+        <input type="text" name="image" placeholder="Image"><br><br>
+        <button type="submit">Add Movie</button>
+    </form>
+    <br><br>
+    <% if (result && result !== "empty" && result !== "error" && result !== "fail") { %>
+        Movie has been added successfully.<br><br>
+        Title: <%= result.title %><br>
+        Release year: <%= result.releaseYear %><br>
+        Category: <%= result.category %><br>
+        Synopsis: $ <%= result.synopsis %><br>
+        Run time: $ <%= result.runtime %><br>
+        Director: $ <%= result.director %><br>
+        Image: $ <%= result.image %><br>
+    <% } else if (result === "empty" || result === "error" || result === "fail") { %>
+        <%= msg %>
+    <% } %>
+</body>
+</html>

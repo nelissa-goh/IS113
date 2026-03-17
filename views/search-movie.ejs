@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Movie</title>
+</head>
+<body>
+    <form action="/search-movie" method="post">
+        <input type="text" name="title" placeholder="Title">
+        <button type="submit">Search</button>
+    </form>
+    <br><br>
+    <% if (result) { %>
+        Title: <%= result.title %><br>
+        Release year: <%= result.releaseYear %><br>
+        Category:<%= result.category %><br>
+        Synopsis:<%= result.synopsis %><br>
+        Run time: <%= result.runTime %><br>
+        Director:<%= result.director %><br>
+        Image:<%= result.image %><br>
+    <% } else if (result===null) { %>
+        <p>Movie not found</p>
+    <% } %>
+</body>
+</html>
