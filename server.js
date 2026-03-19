@@ -3,7 +3,6 @@ const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
 
-const usersRoutes = require("./routes/users-routes");
 const moviesRoutes = require('./routes/movies-routes');
 
 const server = express();
@@ -18,7 +17,6 @@ server.use(express.json());
 server.set("view engine", "ejs");
 
 // root routes
-server.use('/', usersRoutes);
 server.use('/', moviesRoutes);
 
 // path to the environment variable file 'config.env'
@@ -29,6 +27,9 @@ server.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
+const usersRoutes = require("./routes/users-routes");
+server.use('/', usersRoutes);
 
 // async function to connect to DB
 async function connectDB() {

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+
 const User = require('../models/user-model');
 
 // exports.home = (req, res) => res.send('NOT IMPLEMENTED');
@@ -49,7 +50,7 @@ exports.login = async (req, res) => {
             return res.redirect('/admin-profile');
         } */
 
-        res.render('profile', { user: req.session.user });
+        res.redirect('/profile');
     } catch (error) {
         console.error(error);
         res.redirect('/login');
@@ -57,10 +58,22 @@ exports.login = async (req, res) => {
 }
 
 exports.profile = (req, res) => {
+    if (!req.session.user) {
+        console.log("User not logged in, redirecting to /login");
+        return res.redirect('/login');
+    }
     res.render('profile', { user: req.session.user });
 }
 
 /* exports.adminProfile = (req, res) => {
+    if (!req.session.user) {
+        console.log("User not logged in, redirecting to /login");
+        return res.redirect('/login');
+    }
+    if (req.session.user.role !== "admin") {
+        console.log("Not an admin user, redirecting to /profile");
+        return res.redirect('/profile');
+    }
     res.render('admin-profile', { user: req.session.user });
 } */
 
