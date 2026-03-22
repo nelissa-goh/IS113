@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 
 const moviesRoutes = require('./routes/movies-routes');
 
+const reviewsRoutes = require('./routes/reviews-routes');
+
 const server = express();
 
 // add this line when you are using Express to do form (POST)
@@ -18,6 +20,7 @@ server.set("view engine", "ejs");
 
 // root routes
 server.use('/', moviesRoutes);
+server.use('/reviews', reviewsRoutes);
 
 // path to the environment variable file 'config.env'
 dotenv.config({ path: './config.env' });

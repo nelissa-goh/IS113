@@ -1,0 +1,8 @@
+<h1>Add Review</h1>
+
+<form action="/reviews/add/<%= movieId %>" method="POST">
+  <input name="reviewerName" placeholder="Your name" required>
+  <input name="rating" type="number" min="1" max="5" required>
+  <textarea name="comment" placeholder="Comment" required></textarea>
+  <button type="submit">Submit</button>
+</form>
