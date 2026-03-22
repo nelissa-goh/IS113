@@ -24,7 +24,7 @@ const listInfoSchema = new mongoose.Schema({
 
 const ListInfo = mongoose.model('ListInfo', listInfoSchema);
 
-exports.ListInfo = ListInfo;
+// exports.ListInfo = ListInfo;
 
 exports.findByUserId = function(userId) {
   return ListInfo.findOne({ user: userId }).populate('movieList.movie');
