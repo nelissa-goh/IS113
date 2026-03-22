@@ -1,3 +1,4 @@
+//database
 const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
@@ -38,8 +39,8 @@ exports.getAllMovies = function() {
     return Movie.find();
 };
 
-exports.searchByMovieTitle = function(title) {
-    return Movie.findOne({title:title});
+exports.searchByMovieId = function(movieId) {
+    return Movie.findOne({_id: movieId});
 };
 
 exports.addMovie = function(newMovie) {

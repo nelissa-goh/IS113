@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+  <h1>Success!</h1>
+  <p>The following movie(s) have been <%= action %>:</p>
+  <ul>
+    <% affectedMovies.forEach(title => { %>
+      <li><%= title %></li>
+    <% }) %>
+  </ul>
+
+  <a href="/users/<%= userId %>/watchlist">Back to your watchlist</a>
+</body>
+</html>

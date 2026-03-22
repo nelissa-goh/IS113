@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Movies</title>
-</head>
 <body>
-    <% if (movieList.length === 0) { %>
-        <h3>No movies yet.</h3>
-    <% } else { %>
-        <h3>All Movies</h3>
-        <% movieList.forEach(movie => { %>
-            <p><strong>Title: <%= movie.title %></strong></p>
-            Release year: <%= movie.releaseYear %><br>
-            Category:<%= movie.category %><br>
-            Synopsis:<%= movie.synopsis %><br>
-            Runtime: <%= movie.runtime %><br>
-            Director:<%= movie.director %><br>
-            Image:<%= movie.image %><br>
-            <a href="/edit-movie?title=<%= movie.title %>">Edit</a> | 
-            <a href="/delete-movie?title=<%= movie.title %>">Delete</a>
-        <hr>
-        <% }); %>
-    <% } %>
+  <h1>Your Personalised Watch List</h1>
+
+  <% if (moviesList && moviesList.length > 0) { %>
+    <table border="1">
+      <tr>
+        <th>Movie</th>
+        <th>Details</th>
+      </tr>
+
+      <% moviesList.forEach(movie => { %>
+        <tr>
+          <td><strong><%= movie.title %></strong></td>
+          <td>
+            Year: <%= movie.releaseYear %><br>
+            Category: <%= movie.category %><br>
+            Synopsis: <%= movie.sypnosis %><br>
+            Runtime: <%= movie.runTime %><br>
+            Director: <%= movie.director %><br>
+            Image: <%= movie.image %><br>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+  <% } else { %>
+    <p>Your watchlist is currently empty.</p>
+  <% } %>
+
+  <br>
+  <!-- Link to update-status page -->
+  <a href="/users/<%= user %>/update-status">Mark movies as watched/unwatched</a><br>
+  <a href="/users/<%= user %>/add-movies">Add more movies</a><br>
+  <a href="/users/<%= user %>/delete-movies">Remove movies</a>
 </body>
 </html>
