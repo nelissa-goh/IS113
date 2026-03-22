@@ -31,6 +31,10 @@ exports.addUser = function(newUser) {
     return User.create(newUser);
 };
 
+exports.findByUserId = function(userId) {
+    return User.findOne({_id: userId});
+};
+
 /* exports.editUser = function(name, password) {
     return User.updateOne({name:name}, {password:password});
 }
