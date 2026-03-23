@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Delete items from your personal watch list</h1>
+
+    <form action="/delete-movies" method="post">
+     <h3>Movie(s): </h3>
+     <select name="movies"multiple size = '5'>
+        <% selectedMoviesNames.forEach(movieName=>{%> <!--moviesNames would be defined from the database -->
+            <option value="<%=movieName%>"
+            <%=selectedMoviesNames.includes(movieName)  ? 'selected': ''%>>
+                <%=movieName%>
+            </option>
+        <% }) %>
+     </select>
+     <br>
+
+     <button type="submit">Delete</button>
+    
+</body>
+</html>
