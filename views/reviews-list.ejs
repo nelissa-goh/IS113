@@ -1,19 +1,46 @@
-<h1>Reviews</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Reviews</title>
+</head>
+<body>
+  <h1>Movie Reviews</h1>
+  <p>Here are the reviews submitted for this movie.</p>
 
-<a href="/reviews/add/<%= movieId %>">Add Review</a>
+  <hr>
 
-<% if (reviews.length === 0) { %>
-  <p>No reviews yet!</p>
-<% } %>
+  <p>
+    <a href="/reviews/add/<%= movieId %>">Add New Review</a>
+  </p>
 
-<% reviews.forEach(r => { %>
-  <div style="border:1px solid black; margin:10px; padding:10px;">
-    <p><strong>Name:</strong> <%= r.reviewerName %></p>
-    <p><strong>Rating:</strong> <%= r.rating %>/5</p>
-    <p><strong>Comment:</strong> <%= r.comment %></p>
+  <% if (reviews.length === 0) { %>
+    <p>No reviews have been added yet.</p>
+  <% } else { %>
+    <% reviews.forEach(r => { %>
+      <fieldset>
+        <legend>Review</legend>
 
-    <form action="/reviews/delete/<%= r._id %>" method="POST">
-      <button>Delete</button>
-    </form>
-  </div>
-<% }) %>
+        <p><strong>Reviewer Name:</strong> <%= r.reviewerName %></p>
+        <p><strong>Rating:</strong> <%= r.rating %> / 5</p>
+        <p><strong>Comment:</strong> <%= r.comment %></p>
+
+        <p>
+          <a href="/reviews/edit/<%= r._id %>">Edit</a>
+        </p>
+
+        <form action="/reviews/delete/<%= r._id %>" method="POST">
+          <button type="submit">Delete</button>
+        </form>
+      </fieldset>
+      <br>
+    <% }) %>
+  <% } %>
+
+  <hr>
+
+  <p>
+    <a href="/">Back to Movies</a>
+  </p>
+</body>
+</html>

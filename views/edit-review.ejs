@@ -1,0 +1,17 @@
+<h1>Edit Review</h1>
+
+<form action="/reviews/edit/<%= review._id %>" method="POST">
+  <label>Name:</label>
+  <input type="text" name="reviewerName" value="<%= review.reviewerName %>" required>
+  <br><br>
+
+  <label>Rating:</label>
+  <input type="number" name="rating" min="1" max="5" value="<%= review.rating %>" required>
+  <br><br>
+
+  <label>Comment:</label>
+  <textarea name="comment" required><%= review.comment %></textarea>
+  <br><br>
+
+  <button type="submit">Update Review</button>
+</form>

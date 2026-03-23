@@ -1,8 +1,47 @@
-<h1>Add Review</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Review</title>
+</head>
+<body>
+  <h1>Add Review</h1>
+  <p>Please share your review for this movie below.</p>
 
-<form action="/reviews/add/<%= movieId %>" method="POST">
-  <input name="reviewerName" placeholder="Your name" required>
-  <input name="rating" type="number" min="1" max="5" required>
-  <textarea name="comment" placeholder="Comment" required></textarea>
-  <button type="submit">Submit</button>
-</form>
+  <hr>
+
+  <form action="/reviews/add/<%= movieId %>" method="POST">
+    <fieldset>
+      <legend>Review Details</legend>
+
+      <label for="reviewerName">Reviewer Name:</label>
+      <br>
+      <input type="text" id="reviewerName" name="reviewerName" required>
+      <br><br>
+
+      <label for="rating">Rating:</label>
+      <br>
+      <select id="rating" name="rating" required>
+        <option value="">-- Select Rating --</option>
+        <option value="1">1 - Very Poor</option>
+        <option value="2">2 - Poor</option>
+        <option value="3">3 - Average</option>
+        <option value="4">4 - Good</option>
+        <option value="5">5 - Excellent</option>
+      </select>
+      <br><br>
+
+      <label for="comment">Comment:</label>
+      <br>
+      <textarea id="comment" name="comment" rows="6" cols="50" required></textarea>
+      <br><br>
+
+      <button type="submit">Submit Review</button>
+      <button type="reset">Clear</button>
+    </fieldset>
+  </form>
+
+  <br>
+  <a href="/reviews/movie/<%= movieId %>">Back to Reviews</a>
+</body>
+</html>

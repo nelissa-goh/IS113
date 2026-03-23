@@ -35,3 +35,45 @@ exports.deleteReview = async (req, res) => {
   await Review.findByIdAndDelete(req.params.reviewId);
   res.redirect(`/reviews/movie/${review.movieId}`);
 };
+
+
+
+
+// Show edit form for one review
+exports.showEditReviewForm = async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.reviewId);
+    if (!review) {
+      return res.status(404).send("Review not found");
+    }
+    res.render("edit-review", { review });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error loading edit form");
+  }
+};
+
+// Update one review
+exports.updateReview = async (req, res) => {
+  try {
+    const { reviewerName, rating, comment } = req.body;
+    const review = await Review.findById(req.params.reviewId);
+    if (!review) {
+      return res.status(404).send("Review not found");
+    }
+    if (!reviewerName || !rating || !comment) {
+      return res.send("All fields are required");
+    }
+    if (rating < 1 || rating > 5) {
+      return res.send("Rating must be between 1 and 5");
+    }
+    review.reviewerName = reviewerName;
+    review.rating = rating;
+    review.comment = comment;
+    await review.save();
+    res.redirect(`/reviews/movie/${review.movieId}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating review");
+  }
+};
