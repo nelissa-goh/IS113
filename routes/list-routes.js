@@ -4,7 +4,7 @@ const listController = require('../controllers/list-controller');
 
 const router = express.Router(); // sub application
 //create new watchlist
-router.post('/users/:userId/watchlist/create', listController.createListInfo);
+router.post('/users/:userId/createlist', listController.createListInfo);
 
 //display watch list
 router.get('/users/:userId/watchlist', listController.displayList);
