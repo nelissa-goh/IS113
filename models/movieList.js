@@ -22,7 +22,7 @@ const listInfoSchema = new mongoose.Schema({
     }]
 });
 
-const ListInfo = mongoose.model('ListInfo', listInfoSchema);
+const ListInfo = mongoose.model('ListInfo', listInfoSchema, 'listinfo' );
 
 exports.ListInfo = ListInfo;
 
