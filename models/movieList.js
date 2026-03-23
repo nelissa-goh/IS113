@@ -24,25 +24,16 @@ const listInfoSchema = new mongoose.Schema({
 
 const ListInfo = mongoose.model('ListInfo', listInfoSchema, 'listinfo' );
 
-exports.ListInfo = ListInfo;
-
-exports.findByUserId = function(userId) {
-  return ListInfo.findOne({ user: userId }).populate('movieList.movie');
+exports.findById = function(listId) {
+    return ListInfo.findOne({ _id : listId });
 };
 
 exports.createListInfo = function(newListInfo) {
-  return ListInfo.create(newListInfo);
+    return ListInfo.create(newListInfo);
 };
 
-exports.markWatched = function(listId, movieId, isWatched) {
-  return ListInfo.updateOne(
-    { _id: listId, 'movieList.movie': movieId },
-    { $set: { 'movieList.$.isWatched': isWatched } }
-  );
-};
-
-exports.deleteListInfo = function(listId) {
-  return ListInfo.deleteOne({ _id: listId });
+exports.removeFromList = function(listId, isWatched) {
+    return ListInfo.updateOne({ _id : listId}, {$pull: {movieList: {movie : {$in: moviesToRemove}}}});
 };
 
 exports.addToList = function (listId, moviesToAdd) {
@@ -53,6 +44,12 @@ exports.addToList = function (listId, moviesToAdd) {
     return ListInfo.updateOne({ _id : listId}, {$push: {movieList: {$each : movieList}}});
 };
 
-exports.removeFromList = function(listId, isWatched) {
-    return ListInfo.updateOne({ _id : listId}, {$pull: {movieList: {movie : {$in: moviesToRemove}}}});
+exports.markWatched = function (listId, movieId, isWatched) {
+    return ListInfo.updateOne(
+        {_id : listId, 'movieList.movie': movieId}, {$set: {'movieList.$.isWatched': isWatched}}
+    )
+}
+
+exports.deleteListInfo = function(listId) {
+    return ListInfo.deleteOne({_id : listId});
 };
