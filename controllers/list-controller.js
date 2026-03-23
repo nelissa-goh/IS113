@@ -8,7 +8,8 @@ const ListInfo = require('../models/movieList');
 exports.displayList = async (req,res) => {
   try {
     const userId = req.params.userId;
-    const listInfo = await ListInfo.findByUserId(req.params.Id)
+    const listInfo = await ListInfo.findById(req.params.listId)
+      .populate('movieList.movie')
       .populate('movieList.isWatched');
   } catch (error) {
     console.error(error)
