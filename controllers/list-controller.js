@@ -83,7 +83,7 @@ exports.showAddForm = async(req,res)=>{
     const user = req.params.userId;
 
     const allMovies = await Movie.find();
-    const listInfo = await ListInfo.findByUserId(user);
+    const listInfo = await ListInfo.findById(user);
 
     const selectedMovieIds = listInfo ? listInfo.movieList.map(item => item.movie._id.toString()): [];
     //if user has list it maps over and collects id of movie
@@ -111,7 +111,7 @@ exports.addOrUpdateList = async (req, res) => {
       ? req.body.movies
       : [req.body.movies];
 
-    let listInfo = await ListInfo.findByUserId(userId);
+    let listInfo = await ListInfo.findById(userId);
 
     // if (!listInfo) {
     //   // Create new list if none exists
