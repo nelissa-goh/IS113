@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Watch List</title>
+</head>
+<body>
+    <h1><%= watchList.watchListName %></h1>
+
+    <a href="/watchlist">Back to All Watch Lists</a>
+    <a href="/watchlist/<%= watchListId %>/add">Add Movies</a>
+
+    <% if (!watchList) { %>
+        <p>Watch list not found.</p>
+    <% } else if (watchList.movieList.length === 0) { %>
+        <p>No movies in watch list.</p>
+    <% } else { %>
+        <table border="1">
+            <tr>
+                <th>Movie</th>
+                <th>Watched?</th>
+            </tr>
+            <% watchList.movieList.forEach(item =>{ %>
+                <tr>
+                    <td>
+                        <img src="<%= item.movie.image %>" width="80" alt="<%= item.movie.title %>">
+                        <p><%= item.movie.title %></p>
+                        <p><%= item.movie.releaseYear %></p>
+                        <p><%= item.movie.category %></p>
+                        <p><%= item.movie.synopsis %></p>
+                        <p><%= item.movie.runtime %></p>
+                        <p><%= item.movie.director %></p>
+
+                        <form action="/watchlist/<%= watchListId %>/remove" method="post">
+                            <input type="hidden" name="movieId" value="<%= item.movie._id %>">
+                            <button type="submit">Remove from Watchlist</button>
+                        </form>
+
+                    </td>
+                    <td>
+                        <form action="/watchlist/<%= watchListId %>/mark-watched" method="post">
+                        <input type="hidden" name="movieId" value="<%= item.movie._id %>">
+                        <% if (item.isWatched) { %>
+                            <p>Watched</p>
+                            <button type="submit" name="watched" value="false">Mark as Unwatched</button>
+                        <% } else { %>
+                            <p>Not Watched</p>
+                            <button type="submit" name="watched" value="true">Mark as Watched</button>
+                        <% } %>
+                        </form>
+                    </td>
+                </tr>
+    <% }) %>      
+        </table>
+    <% } %>
+</body>
+</html>

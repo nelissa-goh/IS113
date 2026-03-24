@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Watch Lists</title>
+</head>
+<body>
+    <h1>My Watch Lists</h1>
+    <form action="/watchlist/create" method="post">
+        <input type="text" name="watchListName" placeholder="Watch List Name" required>
+        <button type="submit">Create New Watch List</button>
+    </form>
+
+    <% if (!watchLists || watchLists.length === 0) { %>
+        <p>No watch lists available.</p>
+    <% } else { %>
+
+        <table border="1">
+            <tr>
+                <th>Watch List Name</th>
+                <th>Movies</th>
+                <th></th>
+            </tr>
+            <% watchLists.forEach(watchList => { %>
+                <tr>
+                    <td><%= watchList.watchListName %></td>
+                    <td>
+                        <a href="/watchlist/<%= watchList._id %>">View Watch List</a>
+                    </td>
+                    <td>
+                        <form action="/watchlist/<%= watchList._id %>/delete" method="post">
+                            <button type="submit">Delete Watch List</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    <% } %>
+</body>
+</html>

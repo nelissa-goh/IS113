@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add to Watchlist</title>
+</head>
+<body>
+    <h1>Add Movies to Watch List</h1>
+    <form action="/watchlist/<%= watchListId %>/add" method="post">
+        <select name="movieIds" multiple size="10">
+            <% movies.forEach(movie => { %>
+                <option value="<%= movie._id %>"><%= movie.title %></option>
+            <% }) %>
+        </select>
+        <button type="submit">Add Selected Movies to Watch List</button>
+    </form>
+    <a href="/watchlist/<%= watchListId %>">Back to Watch List</a>
+</body>
+</html>
