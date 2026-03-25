@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Movie History</h1>
+
+    <table border="1">
+    <tr>
+        <th>Title</th>
+        <th>Action</th>
+        <th>Timestamp</th>
+        <th>Details</th>
+    </tr>
+
+    <% historyList.forEach(item => { %>
+        <tr>
+        <td><%= item.title %></td>
+        <td><%= item.action %></td>
+        <td><%= item.timestamp %></td>
+        <td><%= item.details %></td>
+        </tr>
+    <% }) %>
+    </table>
+</body>
+</html>
