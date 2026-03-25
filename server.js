@@ -34,6 +34,9 @@ server.use(session({
 const usersRoutes = require("./routes/users-routes");
 server.use('/', usersRoutes);
 
+const historyRoutes = require("./routes/history-routes");
+server.use("/", historyRoutes);
+
 // async function to connect to DB
 async function connectDB() {
   try {
