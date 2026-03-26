@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Your newly added favourites</h1>
+    <% favourites.forEach(fav => {%>
+        <ul>
+            <li>
+                <%=fav.movie.title %>
+            </li>
+        </ul>
+        
+    <% }) %>
+    <a href="/user/<%=userId%>/display-movies">Click here to go back to display.</a>
+    
+    <footer>
+        <p>&copy; 2026 Personal Movie Space. All rights reserved.</p>
+    </footer>
+</body>
+</html>

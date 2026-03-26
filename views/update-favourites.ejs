@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Update your favourites</h1>
+    <p>Below is your personalised watch list. <br>You can favourite/unfavourite movies by clicking the checkbox!</p>
+    
+    <form action="/update-favourites" method="post">
+    <table border = '1'>
+        <tr>
+        <th>
+            Movie 
+        </th>
+        <th>
+            Information
+        </th>
+        <th>
+            Add it to favourites?
+        </th>
+        </tr>
+        <% moviesList.forEach(movie =>{%>
+            <tr>
+                <td>
+                    <strong><%=movie.title %></strong><br>
+                    Image: <%=movie.image%> </td>
+                <td>                
+                    Year: <%=movie.releaseYear %><br>
+                    Category: <%=movie.category %><br>
+                    Sypnosis: <%=movie.sypnosis%><br>
+                    Runtime: <%=movie.runTime %><br>
+                    Director: <%=movie.director %><br>
+                    Image: <%=movie.image%> <br>
+                </td>
+                <td>        
+                    <input type="checkbox" name="favourites" 
+                    value="<%= movie.movie._id %>" <%= movie.isFavourite ? "checked" : "" %>>
+
+                </td>
+            </tr>
+            <% }) %>
+    </table>
+
+    <br>
+    <button type ='submit'>Update</button>
+    </form>
+
+    <footer>
+        <p>&copy; 2026 Personal Movie Space. All rights reserved.</p>
+    </footer>
+    
+</body>
+</html>
