@@ -20,3 +20,7 @@ exports.addHistory = async (data) => {
 exports.getAllHistory = async () => {
   return await History.find().sort({ timestamp: -1 });
 };
+
+exports.clearHistory = async () => {
+  return await History.deleteMany({});
+};
