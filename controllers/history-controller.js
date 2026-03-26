@@ -9,3 +9,13 @@ exports.showHistory = async (req, res) => {
     res.send("Error loading history");
   }
 };
+
+exports.clearHistory = async (req, res) => {
+  try {
+    await History.clearHistory();
+    res.send("History has been cleared.");
+  } catch (err) {
+    console.error(err);
+    res.send("Error clearing history");
+  }
+};
