@@ -9,6 +9,21 @@
     <h1>Your Favourites</h1>
     <p>Your go-to list when you are feeling bored!</p>
 
+    <!-- Show success message if movies were added -->
+    <% if (added) { %>
+        <div class="success-message">
+            <strong>✓ Added!</strong> <%= newMovies %> 
+            <%= newMovies.includes(',') ? 'have' : 'has' %> been added to your favourites.
+        </div>
+    <% } %>
+
+    <!-- Show confirmation message if a movie was removed -->
+    <% if (removed) { %>
+        <div class="success-message">
+            <strong>✓ Removed!</strong> <%= removedMovie %> has been removed from your favourites.
+        </div>
+    <% } %>
+
   <% if (moviesList && moviesList.length > 0) { %>
     <table border = '1'>
         <tr>
@@ -24,7 +39,7 @@
                 Category: <%= movie.category %><br>
                 Synopsis: <%= movie.sypnosis %><br>
                 Runtime: <%= movie.runTime %><br>
-                Director: <%= movie.director %><br>
+                Director: <%= movie.director %><br>%>
             </td>
             </tr>
         <% }) %>
@@ -38,7 +53,7 @@
     Want to favourite/unfavourite movies? Click 
     <a href="/users/<%=user %>/update-favourites">here</a><br>
     Click 
-    <a href="/users/<%=user%>/watchlist">here</a> to view full personal watchlist!
+    <a href="/users/<%=user%>/display-movies">here</a> to view full personal watchlist!
 
     <footer>
         <p>&copy; 2026 Personal Movie Space. All rights reserved.</p>
