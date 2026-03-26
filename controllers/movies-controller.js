@@ -69,6 +69,13 @@ exports.addMovie = async (req, res) => {
       return res.render("add-movie", {result, msg});
     }
     let result = await Movie.addMovie(newMovie);
+    
+    await History.addHistory({
+      result: result,
+      action: "ADD",
+      details: "New movie added"
+    });
+    
     res.render("add-movie", {result:result || null, msg});
   } catch (error) {
     console.error(error);
@@ -115,6 +122,13 @@ exports.editMovie = async (req, res) => {
   try {
     let success = await Movie.editMovie(title, editMovie);
     console.log(success);
+    
+    await History.addHistory({
+      editMovie: editMovie,
+      action: "EDIT",
+      details: "Movie updated"
+    });
+    
     res.send("Movie has been successfully updated.");
   } catch (error) {
     console.error(error);
@@ -142,6 +156,13 @@ exports.deleteMovie = async (req, res) => {
   
   try {
     let success = await Movie.deleteMovie(title);
+  
+    await History.addHistory({
+      title: title,
+      action: "DELETE",
+      details: "Movie deleted"
+    });
+    
     console.log(success);
     if (success.deletedCount === 1) {
       res.send("Movie has been successfully deleted.");
