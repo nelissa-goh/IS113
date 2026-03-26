@@ -3,12 +3,13 @@ const Favourite = require('./../models/favourites-model');
 
 exports.getWatchList = async (req, res) => {
   try {
+    const userId = req.params.userId;
     const favourites = await Favourite.retrieveAll();
-    const userFav = favourites.find(f => f.user.toString() === req.session.userId);
+    const userFav = favourites.find(f => f.user.toString() === userId);
 
     res.render('update-favourites', {
       moviesList: userFav ? userFav.movieList : [],
-      user: req.params.userId
+      user: userId
     });
   } catch (error) {
     console.error(error)
@@ -17,19 +18,14 @@ exports.getWatchList = async (req, res) => {
 };
 
 
-exports.createFavouriteList = async (req,res) =>{
+exports.createFavouriteList = async (req, res) => {
     try {
         const userId = req.params.userId;
-        // let email = req.session.email;
-        // let role = req.session.role;
+        const selectedMovies = req.body.favourite || [];
+        const selectedArray = Array.isArray(selectedMovies) ? selectedMovies : [selectedMovies];
 
-        const selectedMovies= req.query.favourite || [];
-        const selectedArray = Array.isArray(selectedMovies)? selectedMovies: [selectedMovies];
-
-    // Load existing favourites
-    // Try to find an existing favourites document
         // Get all favourites from the database
-        let allFavourites = await retrieveAll();
+        let allFavourites = await Favourite.retrieveAll();
         let favourites = null;
 
         for (let f of allFavourites) {
@@ -39,32 +35,60 @@ exports.createFavouriteList = async (req,res) =>{
             }
         }
 
-    if (!favourites) {
-      // If none exists, create a new one using addFavourites
-      favourites = await Favourite.addFavourites({
-        user: userId,
-        movieList: selectedArray.map(movieId => ({
-          movie: movieId,
-          isFavourite: true
-        }))
-      });
-    } else {
-      // Update existing favourites
-      favourites.movieList.forEach(entry => {
-        entry.isFavourite = selectedArray.includes(entry.movie._id.toString());
-      });
-      await favourites.save();
+        // Track newly added movies
+        let newlyAddedMovies = [];
+
+        if (!favourites) {
+            // If none exists, create a new one
+            favourites = await Favourite.addFavourites({
+                user: userId,
+                movieList: selectedArray.map(movieId => ({
+                    movie: movieId,
+                    isFavourite: true,
+                    dateAdded: new Date()
+                }))
+            });
+            // Populate the newly created document
+            favourites = await Favourite.Favourite.findById(favourites._id).populate('movieList.movie');
+            newlyAddedMovies = favourites.movieList.filter(m => m.isFavourite);
+        } else {
+            // Update existing favourites and track newly added movies
+            const previousFavourites = new Set(
+                favourites.movieList
+                    .filter(m => m.isFavourite)
+                    .map(m => m.movie._id.toString())
+            );
+
+            favourites.movieList.forEach(entry => {
+                const isSelected = selectedArray.includes(entry.movie._id.toString());
+                const wasAlreadyFavourite = previousFavourites.has(entry.movie._id.toString());
+                
+                entry.isFavourite = isSelected;
+                
+                // Update dateAdded if newly marked as favourite
+                if (isSelected && !wasAlreadyFavourite) {
+                    entry.dateAdded = new Date();
+                }
+            });
+
+            await favourites.save();
+
+            // Get newly added movies
+            newlyAddedMovies = favourites.movieList.filter(m => {
+                const isNowFavourite = selectedArray.includes(m.movie._id.toString());
+                const wasNotFavouriteBefore = !previousFavourites.has(m.movie._id.toString());
+                return isNowFavourite && wasNotFavouriteBefore;
+            });
+        }
+
+        // Redirect with success message and newly added movies
+        const movieTitles = newlyAddedMovies.map(m => m.movie.title).join(', ');
+        res.redirect(`/users/${userId}/display-favourites-list?added=true&newMovies=${encodeURIComponent(movieTitles)}`);
+
+    } catch (error) {
+        console.error(error)
+        res.send("Error creating favourites list")
     }
-
-    res.render('favourite-success', {
-      favourites: favourites.movieList.filter(m => m.isFavourite),
-      userId
-    });
-
-  } catch (error) {
-    console.error(error)
-    res.send("Error creating favourites list")
-  }
 };
 
 
@@ -75,7 +99,11 @@ exports.getFavouritesPage = async(req,res) =>{
 
     res.render('display-favourites-list', {
       moviesList: userFav ? userFav.movieList.filter(m => m.isFavourite) : [],
-      user: req.params.userId
+      user: req.params.userId,
+      added: req.query.added === 'true',
+      newMovies: req.query.newMovies || '',
+      removed: req.query.removed === 'true',
+      removedMovie: req.query.movieTitle || ''
     });
   } catch (error) {
     console.error(error);
@@ -83,12 +111,18 @@ exports.getFavouritesPage = async(req,res) =>{
   }
 };
 
-// Remove a favourite by ID
+// Remove a favourite by movie ID
 exports.removeFavourite = async (req, res) => {
-  try {
-    const favouriteId = req.params.favouriteId;
-    await deleteFavourites(favouriteId);
-    res.redirect(`/users/${req.params.userId}/favourites`);
+  try {    
+    const userId = req.params.userId;
+    const movieId = req.params.movieId;
+    const movieTitle = req.query.title || 'Movie';
+
+    // Remove the movie from the user's favourites
+    await Favourite.removeMovieFromFavourites(userId, movieId);
+
+    // Redirect to display favourites with a success message
+    res.redirect(`/users/${userId}/display-favourites-list?removed=true&movieTitle=${encodeURIComponent(movieTitle)}`);
   } catch (error) {
     console.error(error)
     res.send("Error removing movie from favourites.")
