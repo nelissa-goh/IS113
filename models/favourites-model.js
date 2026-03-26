@@ -17,18 +17,20 @@ const favouriteSchema = new mongoose.Schema({
             type: Boolean,
             required: true,
             default: false
+        },
+        dateAdded: {
+            type: Date,
+            default: Date.now
         }
-        
     }],
     createdAt: {
-    type: Date,
-    default: Date.now
-  },
-
+        type: Date,
+        default: Date.now
+    },
     updatedAt: {
-    type: Date,
-    default: Date.now
-  }
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Favourite = mongoose.model('Favourite', favouriteSchema,'favourite');
@@ -45,14 +47,16 @@ exports.addFavourites = function(newFavourite){
     return Favourite.create(newFavourite);
 };
 
-exports.deleteFavourites = function(favouriteId){
-    return Favourite.deleteOne({ _id: favouriteId});
-}
-
 exports.updateFavouriteStatus = function(userId, movieId, isFavourite) {
   return Favourite.updateOne(
     { user: userId, "movieList.movie": movieId },
-    { $set: { "movieList.$.isFavourite": isFavourite } }
+    { $set: { "movieList.$.isFavourite": isFavourite, "movieList.$.dateAdded": new Date() } }
   );
 };
 
+exports.removeMovieFromFavourites = function(userId, movieId) {
+  return Favourite.updateOne(
+    { user: userId },
+    { $pull: { "movieList": { movie: movieId } } }
+  );
+};
