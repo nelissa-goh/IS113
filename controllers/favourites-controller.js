@@ -122,7 +122,7 @@ exports.removeFavourite = async (req, res) => {
     await Favourite.removeMovieFromFavourites(userId, movieId);
 
     // Redirect to display favourites with a success message
-    res.redirect(`/users/${userId}/display-favourites-list?removed=true&movieTitle=${encodeURIComponent(movieTitle)}`);
+    res.redirect(`/users/${userId}/display-favourites-list?removed=true&movieTitle=${movieTitle}`);
   } catch (error) {
     console.error(error)
     res.send("Error removing movie from favourites.")
