@@ -18,7 +18,17 @@ const favouriteSchema = new mongoose.Schema({
             required: true,
             default: false
         }
-    }]
+        
+    }],
+    createdAt: {
+    type: Date,
+    default: Date.now
+  },
+
+    updatedAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const Favourite = mongoose.model('Favourite', favouriteSchema,'favourite');
