@@ -1,51 +1,53 @@
 
-//imports review model so controller can interact with reviews collection in MongoDB
 const Review = require("../models/reviews-model");
 
-
-//retrieves all reviews for a particular movie and retrieves them
 exports.getReviewsByMovie = async (req, res) => {
-  const reviews = await Review.find({ movieId: req.params.movieId });
-  res.render("reviews-list", { reviews, movieId: req.params.movieId });
+  try {
+    const reviews = await Review.findReviewsByMovieId(req.params.movieId);
+    res.render("reviews-list", { reviews, movieId: req.params.movieId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error loading reviews");
+  }
 };
-//displays page where user can add one more review
+
 exports.showAddReviewForm = (req, res) => {
   res.render("add-review", { movieId: req.params.movieId });
 };
 
 exports.addReview = async (req, res) => {
-  const { reviewerName, rating, comment } = req.body;
-//check if any field is empty. If empty, function stops and send error message.
-  if (!reviewerName || !rating || !comment) {
-    return res.send("All fields required");
+  try {
+    const newReview = {
+      movieId: req.params.movieId,
+      reviewerName: req.body.reviewerName,
+      rating: req.body.rating,
+      comment: req.body.comment
+    };
+
+    if (!newReview.reviewerName || !newReview.rating || !newReview.comment) {
+      return res.send("All fields are required");
+    }
+
+    if (newReview.rating < 1 || newReview.rating > 5) {
+      return res.send("Rating must be between 1 and 5");
+    }
+
+    await Review.addReview(newReview);
+    res.redirect(`/reviews/movie/${req.params.movieId}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error adding review");
   }
-
-  await Review.create({
-    movieId: req.params.movieId,
-    reviewerName,
-    rating,
-    comment
-  });
-
-  res.redirect(`/reviews/movie/${req.params.movieId}`);
-};
-//deletes one review from MongoDB
-exports.deleteReview = async (req, res) => {
-  const review = await Review.findById(req.params.reviewId);
-  await Review.findByIdAndDelete(req.params.reviewId);
-  res.redirect(`/reviews/movie/${review.movieId}`);
 };
 
-
-
-
-// Show edit form for one review
 exports.showEditReviewForm = async (req, res) => {
   try {
-    const review = await Review.findById(req.params.reviewId);
+    const review = await Review.findReviewById(req.params.reviewId);
+
     if (!review) {
       return res.status(404).send("Review not found");
     }
+
     res.render("edit-review", { review });
   } catch (error) {
     console.error(error);
@@ -53,27 +55,48 @@ exports.showEditReviewForm = async (req, res) => {
   }
 };
 
-// Update one review
 exports.updateReview = async (req, res) => {
   try {
-    const { reviewerName, rating, comment } = req.body;
-    const review = await Review.findById(req.params.reviewId);
-    if (!review) {
-      return res.status(404).send("Review not found");
-    }
-    if (!reviewerName || !rating || !comment) {
+    const updatedReview = {
+      reviewerName: req.body.reviewerName,
+      rating: req.body.rating,
+      comment: req.body.comment
+    };
+
+    if (!updatedReview.reviewerName || !updatedReview.rating || !updatedReview.comment) {
       return res.send("All fields are required");
     }
-    if (rating < 1 || rating > 5) {
+
+    if (updatedReview.rating < 1 || updatedReview.rating > 5) {
       return res.send("Rating must be between 1 and 5");
     }
-    review.reviewerName = reviewerName;
-    review.rating = rating;
-    review.comment = comment;
-    await review.save();
-    res.redirect(`/reviews/movie/${review.movieId}`);
+
+    const existingReview = await Review.findReviewById(req.params.reviewId);
+
+    if (!existingReview) {
+      return res.status(404).send("Review not found");
+    }
+
+    await Review.updateReviewById(req.params.reviewId, updatedReview);
+    res.redirect(`/reviews/movie/${existingReview.movieId}`);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error updating review");
+  }
+};
+
+exports.deleteReview = async (req, res) => {
+  try {
+    const review = await Review.findReviewById(req.params.reviewId);
+
+    if (!review) {
+      return res.status(404).send("Review not found");
+    }
+
+    await Review.deleteReviewById(req.params.reviewId);
+    res.redirect(`/reviews/movie/${review.movieId}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting review");
   }
 };
