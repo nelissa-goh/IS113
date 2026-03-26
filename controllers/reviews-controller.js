@@ -39,6 +39,14 @@ exports.addReview = async (req, res) => {
     }
     //save review 
     await Review.addReview(newReview);
+
+    await History.addHistory({
+      title: req.params.movieId, 
+      action: "ADD",
+      type: "REVIEW",
+      details: "New review added"
+    });
+    
     res.redirect(`/reviews/movie/${req.params.movieId}`);
   } catch (error) {
     console.error(error);
@@ -87,6 +95,14 @@ exports.updateReview = async (req, res) => {
     }
 
     await Review.updateReviewById(req.params.reviewId, updatedReview);
+
+    await History.addHistory({
+      title: req.params.movieId,
+      action: "EDIT",
+      type: "REVIEW",
+      details: "Review updated"
+    });
+    
     res.redirect(`/reviews/movie/${existingReview.movieId}`);
   } catch (error) {
     console.error(error);
@@ -103,6 +119,14 @@ exports.deleteReview = async (req, res) => {
     }
 
     await Review.deleteReviewById(req.params.reviewId);
+
+    await History.addHistory({
+      title: req.params.movieId,
+      action: "DELETE",
+      type: "REVIEW",
+      details: "Review deleted"
+    });
+    
     res.redirect(`/reviews/movie/${review.movieId}`);
   } catch (error) {
     console.error(error);
