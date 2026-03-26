@@ -16,6 +16,9 @@
         <th>
             Add it to favourites?
         </th>
+        <th>
+            Remove from Favourites?
+        </th>
         </tr>
         <% moviesList.forEach(movie =>{%>
             <tr>
@@ -34,6 +37,15 @@
                     <input type="checkbox" name="favourites" 
                     value="<%= movie.movie._id %>" <%= movie.isFavourite ? "checked" : "" %>>
 
+                </td>
+                <td>
+                    <% if (movie.isFavourite) { %>
+                        <form action="/users/<%= user %>/display-favourites-list/<%= movie.movie._id %>/delete" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
+                    <% } else { %>
+                        <span>-</span>
+                    <% } %>
                 </td>
             </tr>
             <% }) %>
