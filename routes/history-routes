@@ -4,4 +4,6 @@ const historyController = require("../controllers/history-controller");
 
 router.get("/movie-history", historyController.showHistory);
 
+router.post("/clear-history", historyController.clearHistory);
+
 module.exports = router; 
